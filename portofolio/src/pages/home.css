@@ -1,0 +1,32 @@
+.windowVideo {
+  position: absolute;
+  /* top: 408px;
+  left: 180px; */
+  top: 35px;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.popup {
+  position: fixed; /* Stays in place even when the page is scrolled */
+  top: 50%; /* Center the popup vertically */
+  left: 50%; /* Center the popup horizontally */
+  transform: translate(-50%, -50%); /* Adjust position for perfect centering */
+  z-index: 1000; /* Ensure the popup is above other content */
+  width: 80%; /* Set a responsive width */
+  max-width: 500px; /* Maximum width for the popup */
+  padding: 20px; /* Inner spacing for the popup content */
+  background-color: white; /* White background for the popup */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for a 3D effect */
+  border-radius: 8px; /* Rounded corners for a smooth look */
+  opacity: 0; /* Initially hidden */
+  transition: opacity 0.3s ease; /* Smooth transition for showing/hiding */
+  color: wheat;
+  font-size: 30px;
+}
+
+

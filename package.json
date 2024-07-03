@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@react-spring/three": "^9.7.3",
+    "@react-three/drei": "^9.107.1",
+    "@react-three/fiber": "^8.16.8",
+    "@types/three": "^0.165.0",
+    "gsap": "^3.12.5",
+    "react-router-dom": "^6.24.0",
+    "three": "^0.165.0"
+  }
+}
