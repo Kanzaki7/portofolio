@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import shipScene from '../assets/3d/rocket.glb';
+import shipScene from '../assets/3d/rocketV.glb';
 
 const Rocket = ({ isRotating, ...props }) => {
     const ref = useRef();

@@ -15,7 +15,7 @@ const Book = ({ isRotating, ...props }) => {
   
 
     return (
-        <mesh {...props} scale={[0.3, 0.3, 0.3]} position={[0.6, 0.83, 0]} rotation={[0, -0.2, -0.6]}>
+        <mesh {...props} scale={[0.3, 0.3, 0.3]} position={[0.6, 0.83, 0]} rotation={[0, -1, -0.6]}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );
