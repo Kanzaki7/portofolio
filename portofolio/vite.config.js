@@ -6,6 +6,14 @@ export default defineConfig({
   plugins: [react()],
   server: {
     open: true,
+    middleware: [
+      (req, res, next) => {
+        if (req.url.endsWith('.js')) {
+          res.setHeader('Content-Type', 'application/javascript');
+        }
+        next();
+      }
+    ]
   },
   build: {
     outDir: 'dist',
@@ -15,5 +23,7 @@ export default defineConfig({
       '@': '/src',
     },
   },
-  assetsInclude: ['**/*.glb'],  
+  assetsInclude: ['**/*.glb', '**/*.gltf'],
+  publicDir: 'public',
+  base: '/portofolio/',
 })
