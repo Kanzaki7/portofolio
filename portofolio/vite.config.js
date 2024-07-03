@@ -25,5 +25,5 @@ export default defineConfig({
   },
   assetsInclude: ['**/*.glb', '**/*.gltf'],
   publicDir: 'public',
-  base: '/portofolio/',
+  base: '/',
 })
