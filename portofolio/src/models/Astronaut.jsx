@@ -3,7 +3,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
-import shipScene from '../assets/3d/astronaut3.glb';
+import shipScene from '/astronaut3.glb';
 
 
 const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, setZoomedAstro, zoomedAstro, ...props }) => {

@@ -3,7 +3,7 @@ import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { gsap } from 'gsap';
-import shipScene from '../assets/3d/satellite.glb';
+import shipScene from '/satellite.glb';
 
 
 const Satellite = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, setZoomedSatellite, zoomedSatellite, ...props }) => {

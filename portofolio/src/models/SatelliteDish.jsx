@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import shipScene from '../assets/3d/satellite_dish.glb';
+import shipScene from '/satellite_dish.glb';
 
 const SatelliteDish = ({ isRotating, ...props }) => {
     const ref = useRef();

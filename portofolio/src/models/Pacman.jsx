@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import shipScene from '../assets/3d/the_house_of_the_dead_arcade_cabinet.glb';
+import shipScene from '/the_house_of_the_dead_arcade_cabinet.glb';
 
 const Pacman = ({ isRotating, ...props }) => {
     const ref = useRef();

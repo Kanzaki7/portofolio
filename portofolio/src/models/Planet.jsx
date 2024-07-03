@@ -12,7 +12,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { a } from '@react-spring/three';
 import { gsap } from "gsap";
 
-import islandScene from '../assets/3d/wonderful_world.glb';
+import islandScene from '/wonderful_world.glb';
 import Pacman from './Pacman'
 import Ship from './Ship'
 import Book from './Book'

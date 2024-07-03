@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import shipScene from '../assets/3d/fantastic_castle.glb';
+import shipScene from '/fantastic_castle.glb';
 import * as THREE from 'three';
 
 const Book = ({ isRotating, ...props }) => {

@@ -1,11 +1,12 @@
 import React, { useRef, useEffect } from 'react';
 import { useGLTF } from '@react-three/drei';
-import { useFrame } from '@react-three/fiber';
-import shipScene from '../assets/3d/rocketV.glb';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { useFrame, useLoader } from '@react-three/fiber';
+import shipScene from '/rocketV.glb';
 
 const Rocket = ({ isRotating, ...props }) => {
     const ref = useRef();
-    const { scene } = useGLTF(shipScene);
+    const { scene } = useLoader(GLTFLoader, shipScene);
 
     useEffect(() => {
       // Optional: Adjust rocket orientation or initial setup here
