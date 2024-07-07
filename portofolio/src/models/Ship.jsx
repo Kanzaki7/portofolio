@@ -14,7 +14,7 @@ const Ship = ({ isRotating, ...props }) => {
   
 
     return (
-        <mesh {...props} scale={[0.0004, 0.0004, 0.0004]} position={[0.1, -0.4, -1.02]} rotation={[-1.9, 3, -0.1]}>
+        <mesh {...props} scale={[0.00045, 0.00045, 0.00045]} position={[0.1, -0.4, -1.02]} rotation={[-1.9, 3, -0.1]}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );

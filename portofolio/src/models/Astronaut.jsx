@@ -25,15 +25,12 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
     useFrame((state) => {
 
         if (ref.current.position.x >= -1 && ref.current.position.x <= 1) {
-            console.log('Pointer over satellite');
-            setCurrentStage(5);
-            // setZoomedIn(true);
-            setZoomedAstro(true);
+            if (zoomedIn == false || currentStage === 0) {
+                console.log('Pointer over satellite');
+                setCurrentStage(5);
+            }
         } else {
             console.log('Pointer out of satellite');
-            // setCurrentStage(0);
-            // setZoomedIn(false);
-            setZoomedAstro(false);
         }
 
 

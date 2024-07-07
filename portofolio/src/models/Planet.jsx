@@ -17,6 +17,7 @@ import Pacman from './Pacman'
 import Ship from './Ship'
 import Book from './Book'
 import SatelliteDish from './SatelliteDish'
+import Torii from './Torii'
 
 const Planet = ({ isRotating, setIsRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, zoomedSatellite, setZoomedSatellite, zoomedAstro, setZoomedAstro, ...props }) => {
 //     const { gl, size } = useThree();
@@ -136,6 +137,15 @@ const { gl, viewport, camera } = useThree();
   };
 
   useEffect(() => {
+
+    if (islandRef.current.position.z == -20) {
+      gsap.to(islandRef.current.position, {
+        duration: 1.5,
+        z: 0,
+        ease: "power2.inOut"
+      });
+    }
+
     const canvas = gl.domElement;
     canvas.addEventListener('pointerdown', handlePointerDown);
     canvas.addEventListener('pointermove', handlePointerMove);
@@ -146,19 +156,16 @@ const { gl, viewport, camera } = useThree();
 
     const handleKeyDown = (event) => {
       if (event.code === 'Enter') {
-        setZoomedIn(true); // Trigger zoom effect on Enter key press
+        if (currentStage === 5) {
+          setZoomedIn(true); // Trigger zoom effect on Enter key press
+          setZoomedAstro(true);
+        } else {
+          setZoomedIn(true); // Trigger zoom effect on Enter key press
+        }
       }
     };
-
-    const handleKeyUp = (event) => {
-      if (event.code === 'Enter') {
-        setZoomedIn(false); // Reset zoom effect when Enter key is released
-      }
-    };
-  
 
     document.addEventListener('keydown', handleKeyDown);
-    document.addEventListener('keyup', handleKeyUp);
 
 
     return () => {
@@ -166,7 +173,6 @@ const { gl, viewport, camera } = useThree();
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
       document.removeEventListener('keydown', handleKeyDown);
-      document.removeEventListener('keyup', handleKeyUp);
     };
     
   }, [gl, handlePointerDown, handlePointerMove, handlePointerUp]);
@@ -203,24 +209,27 @@ const { gl, viewport, camera } = useThree();
         case ((normalizedRotationY >= 4.6 && normalizedRotationY <= 5) || (normalizedRotationY >= 1.3 && normalizedRotationY <= 1.5)) && ((normalizedRotationX >= 0.5 && normalizedRotationX <= 1.1) || (normalizedRotationX >= 1.9 && normalizedRotationX <= 2.3)):
           setCurrentStage(3);
           break;
-        case ((normalizedRotationY >= 5.3 && normalizedRotationY <= 5.7) || (normalizedRotationY >= 2.2 && normalizedRotationY <= 2.8)) && ((normalizedRotationX >= 3.1 && normalizedRotationX <= 3.75) || (normalizedRotationX >= 5.5 && normalizedRotationX <= 6.1)):
+        case ((normalizedRotationY >= 3 && normalizedRotationY <= 4.3) || (normalizedRotationY >= 1.3 && normalizedRotationY <= 2.5) || (normalizedRotationY >= 5 && normalizedRotationY <= 6)) && ((normalizedRotationX >= 4.2 && normalizedRotationX <= 5.1)):
           setCurrentStage(4);
           break;
+        case ((normalizedRotationY >= 1.8 && normalizedRotationY <= 2.4) || (normalizedRotationY >= 4.8 && normalizedRotationY <= 5.4)) && ((normalizedRotationX >= 0.4 && normalizedRotationX <= 1) || (normalizedRotationX >= 2 && normalizedRotationX <= 2.6)):
+          setCurrentStage(6);
+          break;
         default:
-          setCurrentStage(null);
+          setCurrentStage(0);
       }
     }
 
     // Logic for smooth transition based on zoomedIn state
     if (zoomedIn && currentStage === 1) {
       gsap.to(camera.position, {
-        duration: 0.19,
+        duration: 0.23,
         z: 3,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: zoomedInRotation.current.x,
         y: zoomedInRotation.current.y,
         z: zoomedInRotation.current.z,
@@ -228,7 +237,7 @@ const { gl, viewport, camera } = useThree();
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: 0.28945477836248745,
         y: 0.14097192528553837,
         z: 0,
@@ -236,13 +245,13 @@ const { gl, viewport, camera } = useThree();
       });
     } else if (zoomedIn && currentStage == 2) {
         gsap.to(camera.position, {
-        duration: 0.19,
+        duration: 0.23,
         z: 3,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: 0.7,
         y: -1.4,
         z: 0,
@@ -250,7 +259,7 @@ const { gl, viewport, camera } = useThree();
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: 3.21929606082905,
         y: 5.985088333233211,
         z: 0,
@@ -258,80 +267,109 @@ const { gl, viewport, camera } = useThree();
       });
     } else if (zoomedIn && currentStage == 3) {
         gsap.to(camera.position, {
-        duration: 0.19,
-        z: 3.1,
+        duration: 0.23,
+        x: 0.1,
+        y: -0.5,
+        z: 3.3,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
-        x: 0.6,
+        duration: 0.23,
+        x: 0.8,
         y: -0.9,
         z: 0.3,
         ease: "power2.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.19,
-        x: 0.8898241347110671,
-        y: 4.840061873492608,
+        duration: 0.23,
+        x: 0.9475730024136642,
+        y: 4.994527769315647,
         z: 0,
         ease: "power2.inOut"
       });
     } else if (zoomedIn && currentStage == 4) {
         gsap.to(camera.position, {
-        duration: 0.19,
-        z: 4.7,
+        duration: 0.23,
+        x: 0.2,
+        y: -0.4,
+        z: 4,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
-        x: 0.9,
+        duration: 0.23,
+        x: 0.6,
         y: -0.6,
-        z: 0.2,
+        z: 0.3,
         ease: "power2.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.19,
-        x: 5.793018249599205,
-        y: 2.5736585397095606,
+        duration: 0.23,
+        x: 4.657755613882919,
+        y: 2.2562522450286977,
         z: 0,
         ease: "power2.inOut"
       });
-    } else if ((zoomedIn) && (currentStage == 5) && (zoomedAstro)) {
+    } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
         gsap.to(camera.position, {
-        duration: 0.19,
+        duration: 0.23,
         z: 5.4,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: 0.5,
         y: -0.3,
         z: 0.2,
         ease: "power2.inOut"
       });
-    } else {
+    } 
+    else if (zoomedIn && currentStage == 6) {
       gsap.to(camera.position, {
-        duration: 0.19,
+      duration: 0.23,
+      x: 0.2,
+      y: -0.9,
+      z: 3.6,
+      ease: "power2.inOut"
+    });
+
+    gsap.to(camera.rotation, {
+      duration: 0.23,
+      x: 0.7,
+      y: -0.6,
+      z: -0.3,
+      ease: "power2.inOut"
+    });
+
+    gsap.to(islandRef.current.rotation, {
+      duration: 0.23,
+      x: 0.7175668892322182,
+      y: 2.2841860793091673,
+      z: 0,
+      ease: "power2.inOut"
+    });
+  } else {
+      gsap.to(camera.position, {
+        duration: 0.23,
         x: initialCameraPosition.current.x,
         y: initialCameraPosition.current.y,
-        z: initialCameraPosition.current.z,
+        z: 5,
         ease: "power2.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         x: 0,
         y: 0,
         z: 0,
         ease: "power2.inOut"
       });
       gsap.to(islandRef.current.rotation, {
-        duration: 0.19,
+        duration: 0.23,
         z: 0,
         ease: "power2.inOut"
       });
@@ -340,7 +378,7 @@ const { gl, viewport, camera } = useThree();
   });
 
   return (
-      <a.group ref={islandRef} {...props} scale={[1, 1, 1]} position={[0, 0, 0]}>
+      <a.group ref={islandRef} {...props} scale={[1, 1, 1]} position={[0, 0, -20]}>
       <group name="Sketchfab_Scene">
         <group name="Sketchfab_model" rotation={[-Math.PI / 2, 0, 0]}>
           <group name="root">
@@ -383,6 +421,7 @@ const { gl, viewport, camera } = useThree();
                   geometry={nodes.Object_10.geometry}
                   material={materials.material}
                 />
+                <Torii isRotating={isRotating}/>
               </group>
               <group name="Sphere005_4" scale={2.367}>
                 <mesh

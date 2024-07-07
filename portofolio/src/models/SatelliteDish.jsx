@@ -14,7 +14,7 @@ const SatelliteDish = ({ isRotating, ...props }) => {
   
 
     return (
-        <mesh {...props} scale={[0.01, 0.01, 0.01]} position={[-0.6, -0.4, -0.7]} rotation={[1.05, 0, 2.5]}>
+        <mesh {...props} scale={[0.01, 0.01, 0.01]} position={[-0.1, -1.02, -0]} rotation={[1.05, 1.5, 2.1]}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );

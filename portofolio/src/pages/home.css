@@ -11,6 +11,18 @@
   justify-content: center;
 }
 
+.futureCard {
+    position: absolute;
+    top: 90px;
+    left: 700px;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    /* display: flex; */
+    /* justify-content: end; */
+    /* align-items: center; */
+}
+
 .popup {
   position: fixed; /* Stays in place even when the page is scrolled */
   top: 50%; /* Center the popup vertically */
@@ -28,5 +40,6 @@
   color: wheat;
   font-size: 30px;
 }
+
 
 

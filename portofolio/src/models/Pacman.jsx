@@ -14,7 +14,7 @@ const Pacman = ({ isRotating, ...props }) => {
   
 
     return (
-        <mesh {...props} scale={[0.035, 0.035, 0.035]} position={[-0.15, 0.4, 0.89]} rotation={[1.1, 0, 0.1]}>
+        <mesh {...props} scale={[0.04, 0.04, 0.04]} position={[-0.15, 0.4, 0.89]} rotation={[1.1, 0, 0.1]}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );
