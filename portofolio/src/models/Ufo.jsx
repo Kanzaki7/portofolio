@@ -13,8 +13,8 @@ const Ufo = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn,
 
 
     // Orbit parameters
-    const orbitRadius = 97; // Distance from the planet
-    const orbitSpeed = 0.05; // Speed of the orbit
+    const orbitRadius = 90; // Distance from the planet
+    const orbitSpeed = 0.2; // Speed of the orbit
     const orbitInclination = Math.PI / -4; // Inclination of the orbit (30 degrees)
 
 

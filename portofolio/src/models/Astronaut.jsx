@@ -15,7 +15,7 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
     // Orbit parameters
     const orbitRadius = 4; // Distance from the planet
     const orbitSpeed = 0.15; // Speed of the orbit
-    const orbitInclination = Math.PI / 6; // Inclination of the orbit (30 degrees)
+    const orbitInclination = Math.PI / 3; // Inclination of the orbit (30 degrees)
 
     useEffect(() => {
         actions['mixamo.com'].play();
@@ -24,7 +24,7 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
 
     useFrame((state) => {
 
-        if (ref.current.position.x >= -1 && ref.current.position.x <= 1) {
+        if (ref.current.position.x >= -1 && ref.current.position.x <= 2 && ref.current.position.z >= -4 && ref.current.position.z <= -1) {
             if (zoomedIn == false || currentStage === 0) {
                 console.log('Pointer over satellite');
                 setCurrentStage(5);
@@ -52,7 +52,7 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
                 x: 0, // Adjust this to the desired rotation for stage 4
                 y: -1,     // Adjust this to the desired rotation for stage 4
                 z: 3,           // Adjust this to the desired rotation for stage 4
-                ease: "power2.inOut",
+                ease: "sine.inOut",
             });
         } else {
             ref.current.position.set(x, y, z);
@@ -62,7 +62,7 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
                 x: x, // Adjust this to the desired rotation for stage 4
                 y: y,     // Adjust this to the desired rotation for stage 4
                 z: z,           // Adjust this to the desired rotation for stage 4
-                ease: "power2.inOut",
+                ease: "sine.inOut",
             });
         }
 
@@ -73,7 +73,7 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
         gsap.to(ref.current.rotation, {
             duration: 0.5,
             y: state.camera.rotation.y, // Rotate towards the camera
-            ease: "power2.inOut",
+            ease: "sine.inOut",
         });
 
     });

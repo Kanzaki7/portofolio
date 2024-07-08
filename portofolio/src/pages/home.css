@@ -41,5 +41,94 @@
   font-size: 30px;
 }
 
+.boxContainer{
+  display: flex;
+  justify-content: space-between;
+  height: 47px;
+  --boxSize: 8px;
+  --gutter: 4px;
+  width: calc((var(--boxSize) + var(--gutter)) * 5);
+  cursor: pointer;
+}
 
+.boxOn{
+  transform: scaleY(.4);
+  height: 100%;
+  width: var(--boxSize);
+  background: #ffffff;
+  animation-duration: 1.5s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  border-radius: 3px;
+  filter: drop-shadow(0px 0px 3px #05C7F2);
+}
+.boxOff{
+  transform: scaleY(.4);
+  height: 100%;
+  width: var(--boxSize);
+  background: #ffffff;
+  border-radius: 3px;
+  filter: drop-shadow(0px 0px 3px #05C7F2);
+}
+
+.box1{
+  animation-name: quiet;
+}
+
+.box2{
+  animation-name: normal;
+}
+
+.box3{
+  animation-name: quiet;
+}
+
+.box4{
+  animation-name: loud;
+}
+
+.box5{
+  animation-name: normal;
+}
+.box6{
+  animation-name: quiet;
+}
+.box7{
+  animation-name: quiet;
+}
+
+@keyframes quiet {
+  25%{
+    transform: scaleY(.6);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.8);
+  }
+}
+
+@keyframes normal {
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(.6);
+  }
+}
+@keyframes loud {
+  25%{
+    transform: scaleY(1);
+  }
+  50%{
+    transform: scaleY(.4);
+  }
+  75%{
+    transform: scaleY(1.2);
+  }
+}
 

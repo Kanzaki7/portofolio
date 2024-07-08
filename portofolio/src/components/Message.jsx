@@ -10,7 +10,7 @@ const Message = ({ currentStage}) => {
           <div className="messageBorder">
             <div className="message">
                 <div className="messageTitle">
-                    Move the mouse to explore the planet
+                    Drag the mouse to explore the planet
                 </div>
             </div>
           </div> :

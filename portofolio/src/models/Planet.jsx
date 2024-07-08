@@ -12,12 +12,14 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { a } from '@react-spring/three';
 import { gsap } from "gsap";
 
+
 import islandScene from '/wonderful_world.glb';
 import Pacman from './Pacman'
 import Ship from './Ship'
 import Book from './Book'
 import SatelliteDish from './SatelliteDish'
 import Torii from './Torii'
+import { If } from 'three/examples/jsm/nodes/Nodes.js';
 
 const Planet = ({ isRotating, setIsRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, zoomedSatellite, setZoomedSatellite, zoomedAstro, setZoomedAstro, ...props }) => {
 //     const { gl, size } = useThree();
@@ -100,6 +102,7 @@ const { gl, viewport, camera } = useThree();
   const lastPos = useRef({ x: 0, y: 0 });
   const rotationSpeed = useRef({ x: 0, y: 0 });
   const dampingFactor = 0.95;
+  
 
   const handlePointerDown = (e) => {
     e.stopPropagation();
@@ -165,7 +168,9 @@ const { gl, viewport, camera } = useThree();
       }
     };
 
-    document.addEventListener('keydown', handleKeyDown);
+    if (camera.position.z == 5) {
+      document.addEventListener('keydown', handleKeyDown);
+    }
 
 
     return () => {
@@ -200,10 +205,10 @@ const { gl, viewport, camera } = useThree();
 
 
       switch (true) {
-        case ((normalizedRotationY >= -0.6 && normalizedRotationY <= 0.7) || (normalizedRotationY >= 2.7 && normalizedRotationY <= 3.4)) && ((normalizedRotationX >= -0.8 && normalizedRotationX <= 0.5) || (normalizedRotationX >= 2.3 && normalizedRotationX <= 3.4)):
+        case ((normalizedRotationY >= -0.4 && normalizedRotationY <= 0.5) || (normalizedRotationY >= 2.7 && normalizedRotationY <= 3.4)) && ((normalizedRotationX >= -0.5 && normalizedRotationX <= 0.3) || (normalizedRotationX >= 2.5 && normalizedRotationX <= 3.1)):
           setCurrentStage(1);
           break;
-        case ((normalizedRotationY >= 2.8 && normalizedRotationY <= 3.6) || (normalizedRotationY >= -0.01 && normalizedRotationY <= 0.2)) && ((normalizedRotationX >= 5.5 && normalizedRotationX <= 6.3) || (normalizedRotationX >= 3 && normalizedRotationX <= 4)):
+        case ((normalizedRotationY >= 2.9 && normalizedRotationY <= 3.5) || (normalizedRotationY >= -0.01 && normalizedRotationY <= 0.1)) && ((normalizedRotationX >= 5.6 && normalizedRotationX <= 6.2) || (normalizedRotationX >= 3 && normalizedRotationX <= 4)):
           setCurrentStage(2);
           break;
         case ((normalizedRotationY >= 4.6 && normalizedRotationY <= 5) || (normalizedRotationY >= 1.3 && normalizedRotationY <= 1.5)) && ((normalizedRotationX >= 0.5 && normalizedRotationX <= 1.1) || (normalizedRotationX >= 1.9 && normalizedRotationX <= 2.3)):
@@ -223,155 +228,155 @@ const { gl, viewport, camera } = useThree();
     // Logic for smooth transition based on zoomedIn state
     if (zoomedIn && currentStage === 1) {
       gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.4,
         z: 3,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: zoomedInRotation.current.x,
         y: zoomedInRotation.current.y,
         z: zoomedInRotation.current.z,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.28945477836248745,
         y: 0.14097192528553837,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
     } else if (zoomedIn && currentStage == 2) {
         gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.4,
         z: 3,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.7,
         y: -1.4,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 3.21929606082905,
         y: 5.985088333233211,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
     } else if (zoomedIn && currentStage == 3) {
         gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.1,
         y: -0.5,
         z: 3.3,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.8,
         y: -0.9,
         z: 0.3,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.9475730024136642,
         y: 4.994527769315647,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
     } else if (zoomedIn && currentStage == 4) {
         gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.2,
         y: -0.4,
         z: 4,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.6,
         y: -0.6,
         z: 0.3,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 4.657755613882919,
         y: 2.2562522450286977,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
     } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
         gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.4,
         z: 5.4,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.4,
         x: 0.5,
         y: -0.3,
         z: 0.2,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
     } 
     else if (zoomedIn && currentStage == 6) {
       gsap.to(camera.position, {
-      duration: 0.23,
+      duration: 0.4,
       x: 0.2,
       y: -0.9,
       z: 3.6,
-      ease: "power2.inOut"
+      ease: "sine.inOut"
     });
 
     gsap.to(camera.rotation, {
-      duration: 0.23,
+      duration: 0.5,
       x: 0.7,
       y: -0.6,
       z: -0.3,
-      ease: "power2.inOut"
+      ease: "sine.inOutt"
     });
 
     gsap.to(islandRef.current.rotation, {
-      duration: 0.23,
+      duration: 0.5,
       x: 0.7175668892322182,
       y: 2.2841860793091673,
       z: 0,
-      ease: "power2.inOut"
+      ease: "sine.inOut"
     });
-  } else {
+  } else if (zoomedIn == false) {
       gsap.to(camera.position, {
-        duration: 0.23,
+        duration: 0.5,
         x: initialCameraPosition.current.x,
         y: initialCameraPosition.current.y,
         z: 5,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.23,
+        duration: 0.5,
         x: 0,
         y: 0,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
       gsap.to(islandRef.current.rotation, {
-        duration: 0.23,
+        duration: 0.5,
         z: 0,
-        ease: "power2.inOut"
+        ease: "sine.inOut"
       });
 
     }

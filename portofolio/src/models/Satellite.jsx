@@ -45,7 +45,7 @@ const Satellite = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
     
 
     return (
-        <mesh {...props} scale={[0.08, 0.08, 0.08]}>
+        <mesh {...props} scale={[0.1, 0.1, 0.1]}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );

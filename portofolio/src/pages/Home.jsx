@@ -1,4 +1,4 @@
-import { React, Suspense, useState, useEffect } from 'react'
+import { React, Suspense, useState, useEffect, useRef } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import './home.css'
 import Loader from '../components/Loader'
@@ -13,6 +13,7 @@ import Satellite from '../models/Satellite'
 import Astronaut from '../models/Astronaut'
 import Ufo from '../models/Ufo'
 
+import space from "../assets/space.mp3";
 
 const Home = () => {
   const [isRotating, setIsRotating] = useState(false)
@@ -21,7 +22,21 @@ const Home = () => {
   const [zoomedSatellite, setZoomedSatellite] = useState(false); // State to track zoom effect
   const [zoomedAstro, setZoomedAstro] = useState(false); // State to track zoom effect
   const [mailSent, setMailSent] = useState("");
-  
+  // const [rocketShouldMove, setRocketShouldMove] = useState(true);
+  const [isPlayingMusic, setIsPlayingMusic] = useState(true);
+
+  const audioRef = useRef(new Audio(space));
+  audioRef.current.volume = 0.4;
+  audioRef.current.loop = true;
+
+  useEffect(() => {
+    if (isPlayingMusic) {
+      audioRef.current.play();
+    }
+    return () => {
+      audioRef.current.pause();
+    };
+  }, [isPlayingMusic]);
 
   const adjustIslandForScreenSize = () => {
     let screenScale = null;
@@ -64,9 +79,11 @@ const Home = () => {
         setZoomedIn(false); // Reset zoom effect when Enter key is released
         setZoomedAstro(false);
         setMailSent("");
+        // setRocketShouldMove(true);
       } else {
         setZoomedIn(false); // Reset zoom effect when Enter key is released
         setMailSent("");
+        // setRocketShouldMove(true);
       }
     // }
   };
@@ -106,6 +123,17 @@ const Home = () => {
           <Ufo isRotating={isRotating} planeScale={planeScale} planePosition={planePosition}  setCurrentStage={setCurrentStage} currentStage={currentStage} setZoomedIn={setZoomedIn} zoomedIn={zoomedIn}  />
         </Suspense>
       </Canvas>
+      <div className='absolute bottom-2 left-2'>
+        <div className="boxContainer" onClick={() => setIsPlayingMusic(!isPlayingMusic)}>
+          <div className={isPlayingMusic ? "boxOn box1" : "boxOff box1"}></div>
+          <div className={isPlayingMusic ? "boxOn box2" : "boxOff box2"}></div>
+          <div className={isPlayingMusic ? "boxOn box3" : "boxOff box3"}></div>
+          <div className={isPlayingMusic ? "boxOn box4" : "boxOff box4"}></div>
+          <div className={isPlayingMusic ? "boxOn box5" : "boxOff box5"}></div>
+          <div className={isPlayingMusic ? "boxOn box6" : "boxOff box6"}></div>
+          <div className={isPlayingMusic ? "boxOn box7" : "boxOff box7"}></div>
+        </div>
+      </div>
     </section>
   )
 }
