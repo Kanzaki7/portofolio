@@ -11,6 +11,7 @@ from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from backend.settings import DEFAULT_BACK_EMAIL
 
+
 @api_view(["POST", "GET"])
 def sendMail(request):
     data = request.data

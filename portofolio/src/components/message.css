@@ -1,6 +1,35 @@
 .messageBorder {
     filter: drop-shadow(0px 0px 3px #05C7F2);
   }
+.emailBorderOn{
+    filter: drop-shadow(0px 0px 3px #05C7F2);
+    animation: animationOn 1s ease-out;
+  }
+.emailBorderOff {
+    filter: drop-shadow(0px 0px 3px #05C7F2);
+    animation: animationOff 1s ease-out;
+  }
+
+  @keyframes animationOn {
+    0% {
+        opacity: 0;
+        height: 0;
+    }
+    100% {
+        opacity: 1;
+        height: 100%;
+    }
+  } 
+  @keyframes animationOff {
+    0% {
+      opacity: 1;
+      height: 100%;
+    }
+    100% {
+        opacity: 0;
+        height: 0;
+    }
+  } 
 
 .message {
     background: rgba(0, 0, 0, 0.066);

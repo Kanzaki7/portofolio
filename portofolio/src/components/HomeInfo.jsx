@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
+import emailjs from '@emailjs/browser'
 import './futureCard.css'
 
 const HomeInfo = ({currentStage, handleKeyUp, setMailSent, mailSent}) => {
@@ -11,32 +12,69 @@ const HomeInfo = ({currentStage, handleKeyUp, setMailSent, mailSent}) => {
         message: '',
     })
 
+    // const sendMail = async (e) => {
+    //     e.preventDefault()
+    //     const data = new FormData();
+    //     data.append('name', formData.name);
+    //     data.append('email', formData.email);
+    //     data.append('subject', formData.subject);
+    //     data.append('message', formData.message);
+        
+    //     try {
+    //         const response = await axios.post("http://127.0.0.1:8000/api/sendmail", data, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         });
+    //         console.log(response.data);
+    //         if (response.data.status === 'success') {
+    //             setMailSent("sent");
+    //             setTimeout(() => {
+    //                 setMailSent("");
+    //             }, 5000);
+    //         } else {
+    //             setMailSent("error");
+    //         }
+    //     } catch (error) {
+    //         console.error('There was an error!', error);
+    //     }
+    // }
+    console.log(import.meta.env.VITE_APP_EMAILJS_SERVICE_ID);
+    console.log(import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID);
+    console.log(import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY);
     const sendMail = async (e) => {
         e.preventDefault()
-        const data = new FormData();
-        data.append('name', formData.name);
-        data.append('email', formData.email);
-        data.append('subject', formData.subject);
-        data.append('message', formData.message);
-        
-        try {
-            const response = await axios.post("http://127.0.0.1:8000/api/sendmail", data, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            console.log(response.data);
-            if (response.data.status === 'success') {
-                setMailSent("sent");
-                setTimeout(() => {
-                    setMailSent("");
-                }, 5000);
-            } else {
-                setMailSent("error");
-            }
-        } catch (error) {
+        emailjs.send(
+            import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
+            import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
+            {
+                'from_name': formData.name,
+                'to_name': 'Emrah',
+                'from_email': formData.email,
+                'email': formData.email,
+                'to_email': 'emrahoztek@gmail.com',
+                'subject': formData.subject,
+                'message': formData.message,
+            },
+            import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
+        ).then(() => {
+            setMailSent("sent");
+            setTimeout(() => {
+                setMailSent("");
+            }, 5000);
+            setFormData({
+                name: '',
+                email: '',
+                subject: '',
+                message: '',
+            })
+        }).catch((error) => {
             console.error('There was an error!', error);
-        }
+            setMailSent("error");
+            setTimeout(() => {
+                setMailSent("");
+            }, 5000);
+        })
     }
 
     
