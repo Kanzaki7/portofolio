@@ -145,7 +145,8 @@ const HomeInfo = ({currentStage, handleKeyUp, setMailSent, mailSent}) => {
                     <div className='card_pages'>
                         <div className={page == true ? 'about' : 'aboutTrue'} onClick={()=>setPage(false)}>About me</div>
                         <div className={page == false ? 'about' : 'aboutTrue'} onClick={()=>setPage(true)}>My Skills</div>
-                        <div><a href="https://www.linkedin.com/in/emrah-oztek-83475b2a9" target='blank'><img width={45} height={45} src="/linkedin.png" alt="" /></a></div>
+                        <div><a href="https://www.linkedin.com/in/emrah-oztek-83475b2a9" target='blank'><img width={45} height={45} src="/linkedin.png" alt="" /></a></div> 
+                        <div><a href="https://github.com/Kanzaki7" target='blank'><img width={45} height={45} src="/github.png" alt="" /></a></div> 
                     </div>
                     <br />
                     {page == false ?    

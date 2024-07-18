@@ -21,7 +21,7 @@ import SatelliteDish from './SatelliteDish'
 import Torii from './Torii'
 import { If } from 'three/examples/jsm/nodes/Nodes.js';
 
-const Planet = ({ isRotating, setIsRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, zoomedSatellite, setZoomedSatellite, zoomedAstro, setZoomedAstro, ...props }) => {
+const Planet = ({ isRotating, setIsRotating, setCurrentStage, currentStage, setZoomedIn, zoomedIn, zoomedSatellite, setZoomedSatellite, zoomedAstro, setZoomedAstro, handleRocketClick, ...props }) => {
 //     const { gl, size } = useThree();
 //   const islandRef = useRef();
 //   const { nodes, materials, animations } = useGLTF(islandScene);
@@ -102,7 +102,6 @@ const { gl, viewport, camera } = useThree();
   const lastPos = useRef({ x: 0, y: 0 });
   const rotationSpeed = useRef({ x: 0, y: 0 });
   const dampingFactor = 0.95;
-  
 
   const handlePointerDown = (e) => {
     e.stopPropagation();
@@ -139,9 +138,36 @@ const { gl, viewport, camera } = useThree();
     }
   };
 
-  useEffect(() => {
+  const handleTouchStart = (e) => {
+    e.preventDefault();
+    setIsRotating(true);
+    const touch = e.touches[0];
+    lastPos.current = { x: touch.clientX, y: touch.clientY };
+  };
 
-    if (islandRef.current.position.z == -20) {
+  const handleTouchMove = (e) => {
+    e.preventDefault();
+    if (isRotating) {
+      const touch = e.touches[0];
+      const deltaX = (touch.clientX - lastPos.current.x) / viewport.width;
+      const deltaY = (touch.clientY - lastPos.current.y) / viewport.height;
+
+      islandRef.current.rotation.y += deltaX * 0.01 * Math.PI;
+      islandRef.current.rotation.x += deltaY * 0.01 * Math.PI;
+
+      lastPos.current = { x: touch.clientX, y: touch.clientY };
+      rotationSpeed.current = { x: deltaX * 0.01 * Math.PI, y: deltaY * 0.01 * Math.PI };
+    }
+  };
+
+  const handleTouchEnd = (e) => {
+    e.preventDefault();
+    setIsRotating(false);
+  };
+
+
+  useEffect(() => {
+    if (islandRef.current.position.z === -20) {
       gsap.to(islandRef.current.position, {
         duration: 1.5,
         z: 0,
@@ -150,37 +176,57 @@ const { gl, viewport, camera } = useThree();
     }
 
     const canvas = gl.domElement;
-    canvas.addEventListener('pointerdown', handlePointerDown);
-    canvas.addEventListener('pointermove', handlePointerMove);
-    canvas.addEventListener('pointerup', handlePointerUp);
+
+    if (zoomedIn == false) {
+      canvas.addEventListener('pointerdown', handlePointerDown);
+      canvas.addEventListener('pointermove', handlePointerMove);
+      canvas.addEventListener('pointerup', handlePointerUp);
+      canvas.addEventListener('touchstart', handleTouchStart);
+      canvas.addEventListener('touchmove', handleTouchMove);
+      canvas.addEventListener('touchend', handleTouchEnd);
+    }
+
+    const adjustCamera = () => {
+      const aspect = viewport.width / viewport.height;
+      if (aspect < 1) {
+        camera.position.z = 7;
+        islandRef.current.scale.set(0.8, 0.8, 0.8);
+      } else {
+        camera.position.z = 5;
+        islandRef.current.scale.set(1, 1, 1);
+      }
+    };
+
+    adjustCamera();
+    window.addEventListener('resize', adjustCamera);
 
     camera.position.set(initialCameraPosition.current.x, initialCameraPosition.current.y, initialCameraPosition.current.z);
     camera.rotation.set(0, 0, 0);
 
     const handleKeyDown = (event) => {
       if (event.code === 'Enter') {
+        setZoomedIn(true);
         if (currentStage === 5) {
-          setZoomedIn(true); // Trigger zoom effect on Enter key press
           setZoomedAstro(true);
-        } else {
-          setZoomedIn(true); // Trigger zoom effect on Enter key press
         }
       }
     };
 
-    if (camera.position.z == 5) {
-      document.addEventListener('keydown', handleKeyDown);
-    }
 
+    document.addEventListener('keydown', handleKeyDown);
+    
 
     return () => {
       canvas.removeEventListener('pointerdown', handlePointerDown);
       canvas.removeEventListener('pointermove', handlePointerMove);
       canvas.removeEventListener('pointerup', handlePointerUp);
+      canvas.removeEventListener('touchstart', handleTouchStart);
+      canvas.removeEventListener('touchmove', handleTouchMove);
+      canvas.removeEventListener('touchend', handleTouchEnd);
       document.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('resize', adjustCamera);
     };
-    
-  }, [gl, handlePointerDown, handlePointerMove, handlePointerUp]);
+  }, [gl, handlePointerDown, handlePointerMove, handlePointerUp, viewport, handleTouchStart, handleTouchMove, handleTouchEnd]);
 
   useFrame(() => {
     if (!isRotating) {
@@ -223,163 +269,812 @@ const { gl, viewport, camera } = useThree();
         default:
           setCurrentStage(0);
       }
+      
     }
 
-    // Logic for smooth transition based on zoomedIn state
-    if (zoomedIn && currentStage === 1) {
-      gsap.to(camera.position, {
-        duration: 0.4,
-        z: 3,
-        ease: "sine.inOut"
-      });
+    // const zoomedInRotation = useRef({ x: 0.7, y: -0.4, z: 0 });
+    
+    if (window.innerWidth <= 375) {
+      // Logic for smooth transition based on zoomedIn state
+      if (zoomedIn && currentStage === 1) {
+        gsap.to(camera.position, {
+          duration: 0.4,
+          y: -0.53,
+          z: 2.5,
+          ease: "sine.inOut"
+        });
 
-      gsap.to(camera.rotation, {
-        duration: 0.4,
-        x: zoomedInRotation.current.x,
-        y: zoomedInRotation.current.y,
-        z: zoomedInRotation.current.z,
-        ease: "sine.inOut"
-      });
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.9,
+          y: 0.04,
+          z: zoomedInRotation.current.z,
+          ease: "sine.inOut"
+        });
 
-      gsap.to(islandRef.current.rotation, {
-        duration: 0.4,
-        x: 0.28945477836248745,
-        y: 0.14097192528553837,
-        z: 0,
-        ease: "sine.inOut"
-      });
-    } else if (zoomedIn && currentStage == 2) {
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 0.28945500000000024,
+          y: 0.14097199999999965,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 2) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          y: -0.7,
+          z: 3.2,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 1,
+          y: -0.1,
+          z: 0,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 5.845279087054325,
+          y: 3.28971910781601,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 3) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          x: -0.3,
+          y: -0.2,
+          z: 3.1,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.8,
+          y: -0.3,
+          z: 0.3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 0.803457120310501,
+          y: 4.820682131861398,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 4) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          x: 0,
+          y: -0.2,
+          z: 3.4,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.6,
+          y: -0.1,
+          z: 0.3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 4.592248398087243,
+          y: 3.24412777983353,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          x: -0.3,
+          y: 1.2,
+          z: 5.4,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: -0.2,
+          y: 0,
+          z: 0.2,
+          ease: "sine.inOut"
+        });
+      } 
+      else if (zoomedIn && currentStage == 6) {
         gsap.to(camera.position, {
         duration: 0.4,
-        z: 3,
+        x: -0.2,
+        y: -0.4,
+        z: 3.2,
         ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.4,
-        x: 0.7,
-        y: -1.4,
-        z: 0,
-        ease: "sine.inOut"
-      });
-
-      gsap.to(islandRef.current.rotation, {
-        duration: 0.4,
-        x: 3.21929606082905,
-        y: 5.985088333233211,
-        z: 0,
-        ease: "sine.inOut"
-      });
-    } else if (zoomedIn && currentStage == 3) {
-        gsap.to(camera.position, {
-        duration: 0.4,
-        x: 0.1,
-        y: -0.5,
-        z: 3.3,
-        ease: "sine.inOut"
-      });
-
-      gsap.to(camera.rotation, {
-        duration: 0.4,
+        duration: 0.5,
         x: 0.8,
-        y: -0.9,
-        z: 0.3,
-        ease: "sine.inOut"
+        y: -0.3,
+        z: -0.3,
+        ease: "sine.inOutt"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.4,
-        x: 0.9475730024136642,
-        y: 4.994527769315647,
+        duration: 0.5,
+        x: 0.5741813677014385,
+        y: 2.2690755674931644,
         z: 0,
         ease: "sine.inOut"
       });
-    } else if (zoomedIn && currentStage == 4) {
+    } else if (zoomedIn == false) {
+        gsap.to(camera.position, {
+          duration: 0.5,
+          x: initialCameraPosition.current.x,
+          y: initialCameraPosition.current.y,
+          z: 5,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.5,
+          x: 0,
+          y: 0,
+          z: 0,
+          ease: "sine.inOut"
+        });
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.5,
+          z: 0,
+          ease: "sine.inOut"
+        });
+
+      }
+    } else if (window.innerWidth <= 480) {
+        // Logic for smooth transition based on zoomedIn state
+        if (zoomedIn && currentStage === 1) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.1,
+            y: -0.1,
+            z: 2.8,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.9,
+            y: -0.1,
+            z: zoomedInRotation.current.z,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.22113117022956086,
+            y: 0.2435171431003651,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 2) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            y: -0.7,
+            z: 3.2,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 1,
+            y: -0.1,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 5.807378757129229,
+            y: 3.3110093505098543,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 3) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.3,
+            y: -0.2,
+            z: 3.1,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.8,
+            y: -0.3,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.7611075175943913,
+            y: 4.837319520998387,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 4) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0,
+            y: -0.2,
+            z: 3.4,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.6,
+            y: -0.1,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 4.6119002663238895,
+            y: 3.2923474388894114,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.3,
+            y: 1.2,
+            z: 5.4,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: -0.2,
+            y: 0,
+            z: 0.2,
+            ease: "sine.inOut"
+          });
+        } 
+        else if (zoomedIn && currentStage == 6) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.2,
+            y: -0.4,
+            z: 3.2,
+            ease: "sine.inOut"
+          });
+    
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0.8,
+            y: -0.3,
+            z: -0.3,
+            ease: "sine.inOutt"
+          });
+  
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.5,
+          x: 0.6017890341576511,
+          y: 2.2615578816278177,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn == false) {
+          gsap.to(camera.position, {
+            duration: 0.5,
+            x: initialCameraPosition.current.x,
+            y: initialCameraPosition.current.y,
+            z: 5,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0,
+            y: 0,
+            z: 0,
+            ease: "sine.inOut"
+          });
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.5,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+        }
+    } else if (window.innerWidth <= 768) {
+        // Logic for smooth transition based on zoomedIn state
+        if (zoomedIn && currentStage === 1) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.1,
+            y: -0.3,
+            z: 3.5,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.9,
+            y: -0.1,
+            z: zoomedInRotation.current.z,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.2938155362663455,
+            y: 0.21441280106886573,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 2) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            y: -0.65,
+            z: 3.8,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 1,
+            y: -0.1,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 3.344335584255292,
+            y: 0.024614605802901757,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 3) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.2,
+            y: -0.1,
+            z: 3.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.8,
+            y: -0.2,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.7918151697631224,
+            y: 4.817677888193271,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 4) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.3,
+            y: -0.1,
+            z: 4,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.6,
+            y: 0.1,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 4.615177480805791,
+            y: 3.1478773995890243,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.3,
+            y: 1.2,
+            z: 5.4,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: -0.2,
+            y: 0,
+            z: 0.2,
+            ease: "sine.inOut"
+          });
+        } 
+        else if (zoomedIn && currentStage == 6) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: -0.1,
+            y: -0.2,
+            z: 3.4,
+            ease: "sine.inOut"
+          });
+    
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0.8,
+            y: -0.3,
+            z: -0.3,
+            ease: "sine.inOutt"
+          });
+  
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.5,
+          x: 0.6247231311573982,
+          y: 2.2505957919892,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn == false) {
+          gsap.to(camera.position, {
+            duration: 0.5,
+            x: initialCameraPosition.current.x,
+            y: initialCameraPosition.current.y,
+            z: 5,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0,
+            y: 0,
+            z: 0,
+            ease: "sine.inOut"
+          });
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.5,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+        }
+    } else if (window.innerWidth <= 1024) {
+        // Logic for smooth transition based on zoomedIn state
+        if (zoomedIn && currentStage === 1) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.1,
+            y: -0.6,
+            z: 3.5,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.9,
+            y: -0.5,
+            z: zoomedInRotation.current.z,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.28376543721009284,
+            y: 0.2109134946465705,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 2) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            y: -0.9,
+            z: 3.8,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 1,
+            y: -0.6,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 3.330172085583424,
+            y: 0.018875740299563404,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 3) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.26,
+            y: -0.4,
+            z: 3.4,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.9,
+            y: -0.35,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 0.7987446056549006,
+            y: 4.795094293769255,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if (zoomedIn && currentStage == 4) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.4,
+            y: -1,
+            z: 3.6,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: 0.9,
+            y: -0.35,
+            z: 0.3,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.4,
+            x: 4.563751658753307,
+            y: 3.9516959375119423,
+            z: 0,
+            ease: "sine.inOut"
+          });
+        } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.5,
+            y: 1,
+            z: 5.7,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.4,
+            x: -0.2,
+            y: 0,
+            z: 0.2,
+            ease: "sine.inOut"
+          });
+        } 
+        else if (zoomedIn && currentStage == 6) {
+          gsap.to(camera.position, {
+            duration: 0.4,
+            x: 0.2,
+            y: -0.6,
+            z: 3.4,
+            ease: "sine.inOut"
+          });
+    
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0.8,
+            y: -0.465,
+            z: -0.3,
+            ease: "sine.inOutt"
+          });
+  
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.5,
+          x: 0.6519291780643481,
+          y: 2.2293977155843088,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn == false) {
+          gsap.to(camera.position, {
+            duration: 0.5,
+            x: initialCameraPosition.current.x,
+            y: initialCameraPosition.current.y,
+            z: 5,
+            ease: "sine.inOut"
+          });
+  
+          gsap.to(camera.rotation, {
+            duration: 0.5,
+            x: 0,
+            y: 0,
+            z: 0,
+            ease: "sine.inOut"
+          });
+          gsap.to(islandRef.current.rotation, {
+            duration: 0.5,
+            z: 0,
+            ease: "sine.inOut"
+          });
+  
+        }
+    } else {
+      // Logic for smooth transition based on zoomedIn state
+      if (zoomedIn && currentStage === 1) {
+        gsap.to(camera.position, {
+          duration: 0.4,
+          z: 3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: zoomedInRotation.current.x,
+          y: zoomedInRotation.current.y,
+          z: zoomedInRotation.current.z,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 0.28945477836248745,
+          y: 0.14097192528553837,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 2) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          z: 3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.7,
+          y: -1.4,
+          z: 0,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 3.21929606082905,
+          y: 5.985088333233211,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 3) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          x: 0.1,
+          y: -0.5,
+          z: 3.3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.8,
+          y: -0.9,
+          z: 0.3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 0.9475730024136642,
+          y: 4.994527769315647,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if (zoomedIn && currentStage == 4) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          x: 0.2,
+          y: -0.4,
+          z: 4,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.6,
+          y: -0.6,
+          z: 0.3,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.4,
+          x: 4.657755613882919,
+          y: 2.2562522450286977,
+          z: 0,
+          ease: "sine.inOut"
+        });
+      } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+          gsap.to(camera.position, {
+          duration: 0.4,
+          z: 5.4,
+          ease: "sine.inOut"
+        });
+
+        gsap.to(camera.rotation, {
+          duration: 0.4,
+          x: 0.5,
+          y: -0.3,
+          z: 0.2,
+          ease: "sine.inOut"
+        });
+      } 
+      else if (zoomedIn && currentStage == 6) {
         gsap.to(camera.position, {
         duration: 0.4,
         x: 0.2,
-        y: -0.4,
-        z: 4,
+        y: -0.9,
+        z: 3.6,
         ease: "sine.inOut"
       });
 
       gsap.to(camera.rotation, {
-        duration: 0.4,
-        x: 0.6,
+        duration: 0.5,
+        x: 0.7,
         y: -0.6,
-        z: 0.3,
-        ease: "sine.inOut"
+        z: -0.3,
+        ease: "sine.inOutt"
       });
 
       gsap.to(islandRef.current.rotation, {
-        duration: 0.4,
-        x: 4.657755613882919,
-        y: 2.2562522450286977,
+        duration: 0.5,
+        x: 0.7175668892322182,
+        y: 2.2841860793091673,
         z: 0,
         ease: "sine.inOut"
       });
-    } else if ((zoomedIn && currentStage == 5) && zoomedAstro) {
+    } else if (zoomedIn == false) {
         gsap.to(camera.position, {
-        duration: 0.4,
-        z: 5.4,
-        ease: "sine.inOut"
-      });
+          duration: 0.5,
+          x: initialCameraPosition.current.x,
+          y: initialCameraPosition.current.y,
+          z: 5,
+          ease: "sine.inOut"
+        });
 
-      gsap.to(camera.rotation, {
-        duration: 0.4,
-        x: 0.5,
-        y: -0.3,
-        z: 0.2,
-        ease: "sine.inOut"
-      });
-    } 
-    else if (zoomedIn && currentStage == 6) {
-      gsap.to(camera.position, {
-      duration: 0.4,
-      x: 0.2,
-      y: -0.9,
-      z: 3.6,
-      ease: "sine.inOut"
-    });
+        gsap.to(camera.rotation, {
+          duration: 0.5,
+          x: 0,
+          y: 0,
+          z: 0,
+          ease: "sine.inOut"
+        });
+        gsap.to(islandRef.current.rotation, {
+          duration: 0.5,
+          z: 0,
+          ease: "sine.inOut"
+        });
 
-    gsap.to(camera.rotation, {
-      duration: 0.5,
-      x: 0.7,
-      y: -0.6,
-      z: -0.3,
-      ease: "sine.inOutt"
-    });
-
-    gsap.to(islandRef.current.rotation, {
-      duration: 0.5,
-      x: 0.7175668892322182,
-      y: 2.2841860793091673,
-      z: 0,
-      ease: "sine.inOut"
-    });
-  } else if (zoomedIn == false) {
-      gsap.to(camera.position, {
-        duration: 0.5,
-        x: initialCameraPosition.current.x,
-        y: initialCameraPosition.current.y,
-        z: 5,
-        ease: "sine.inOut"
-      });
-
-      gsap.to(camera.rotation, {
-        duration: 0.5,
-        x: 0,
-        y: 0,
-        z: 0,
-        ease: "sine.inOut"
-      });
-      gsap.to(islandRef.current.rotation, {
-        duration: 0.5,
-        z: 0,
-        ease: "sine.inOut"
-      });
-
+      }
     }
+
   });
 
   return (

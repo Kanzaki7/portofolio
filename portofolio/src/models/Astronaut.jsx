@@ -24,13 +24,55 @@ const Astronaut = ({ isRotating, setCurrentStage, currentStage, setZoomedIn, zoo
 
     useFrame((state) => {
 
-        if (ref.current.position.x >= -1 && ref.current.position.x <= 2 && ref.current.position.z >= -4 && ref.current.position.z <= -1) {
-            if (zoomedIn == false || currentStage === 0) {
-                console.log('Pointer over satellite');
-                setCurrentStage(5);
+        // console.log(ref.current.position.x);
+        // console.log(ref.current.position.y);
+        // console.log(ref.current.position.z);
+
+        if (window.innerWidth <= 375) {
+            if (ref.current.position.z >= -1 && ref.current.position.z <= 0) {
+                if (zoomedIn == false || currentStage === 0) {
+                    // console.log('Pointer over satellite');
+                    setCurrentStage(5);
+                }
+            } else {
+                console.log('Pointer out of satellite');
+            }
+        } else if (window.innerWidth <= 480) {
+            if (ref.current.position.z >= -2.5 && ref.current.position.z <= 1.3) {
+                if (zoomedIn == false || currentStage === 0) {
+                    // console.log('Pointer over satellite');
+                    setCurrentStage(5);
+                }
+            } else {
+                // console.log('Pointer out of satellite');
+            }
+        } else if (window.innerWidth <= 768) {
+            if (ref.current.position.z >= -1.7 && ref.current.position.z <= 1.6) {
+                if (zoomedIn == false || currentStage === 0) {
+                    // console.log('Pointer over satellite');
+                    setCurrentStage(5);
+                }
+            } else {
+                // console.log('Pointer out of satellite');
+            }
+        } else if (window.innerWidth <= 1024) {
+            if (ref.current.position.z >= -3 && ref.current.position.z <= 0) {
+                if (zoomedIn == false || currentStage === 0) {
+                    // console.log('Pointer over satellite');
+                    setCurrentStage(5);
+                }
+            } else {
+                // console.log('Pointer out of satellite');
             }
         } else {
-            console.log('Pointer out of satellite');
+            if (ref.current.position.x >= -1 && ref.current.position.x <= 2 && ref.current.position.z >= -4 && ref.current.position.z <= -1) {
+                if (zoomedIn == false || currentStage === 0) {
+                    // console.log('Pointer over satellite');
+                    setCurrentStage(5);
+                }
+            } else {
+                // console.log('Pointer out of satellite');
+            }
         }
 
 

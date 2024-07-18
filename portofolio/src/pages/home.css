@@ -13,7 +13,7 @@
 
 .futureCard {
     position: absolute;
-    top: 90px;
+    top: 70px;
     left: 700px;
     right: 0;
     bottom: 0;
@@ -131,4 +131,206 @@
     transform: scaleY(1.2);
   }
 }
+
+
+.clickEnter {
+  /* padding: 1rem 2rem; */
+  border: 5px solid #05C7F2;
+  border-radius: 35px;
+  border: none;
+  /* font-size: 1rem; */
+  font-weight: 400;
+  color: #f4f0ff;
+  text-align: center;
+  backdrop-filter: blur(10px);
+  cursor: pointer;
+  width: 200px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.clickEnter::before {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 35px;
+  background: linear-gradient(180deg, #0544f200 0%, #053cf25e 100%),#054cf23c;
+  box-shadow: inset 0 0 12px rgba(151, 255, 161, 0.44);
+  z-index: -1;
+}
+
+.clickEnter::after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(180deg, #05c7f200 0%, #05c7f25e 100%),#05c7f22a;
+  box-shadow: inset 0 0 12px #05c7f24e;
+  border-radius: 35px;
+  opacity: 0;
+  z-index: -1;
+  transition: all .3s ease-in;
+}
+
+.clickEnter:hover::after {
+  opacity: 1;
+}
+
+.click-borderEnter {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 35px;
+  z-index: -1;
+}
+
+.click-borderEnter::before {
+  content: "";
+  position: absolute;
+  border-radius: 35px;
+  padding: 1px;
+  inset: 0;
+  background: linear-gradient(180deg, #05c7f200 0%, #05c7f258 100%),#05c7f234;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.text-bottomClick {
+  font-size: 20px;
+}
+
+
+@media screen and (max-width: 1440px) {
+  .windowVideo {
+    top: 30px;
+  }
+
+  .futureCard {
+    top: 100px;
+    left: 450px;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .popup {
+    width: 90%;
+    font-size: 20px;
+  }
+
+  .boxContainer {
+    --boxSize: 6px;
+    --gutter: 3px;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .windowVideo {
+    top: 30px;
+  }
+
+  .futureCard {
+    top: 100px;
+    left: 450px;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .popup {
+    width: 90%;
+    font-size: 20px;
+  }
+
+  .boxContainer {
+    --boxSize: 6px;
+    --gutter: 3px;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .windowVideo {
+    top: 20px;
+  }
+
+  .futureCard {
+    top: 60px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .popup {
+    width: 90%;
+    font-size: 20px;
+  }
+
+  .boxContainer {
+    --boxSize: 6px;
+    --gutter: 3px;
+  }
+}
+
+
+@media screen and (max-width: 768px) {
+  .windowVideo {
+    top: 20px;
+  }
+
+  .futureCard {
+    top: 60px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .popup {
+    width: 90%;
+    font-size: 20px;
+  }
+
+  .boxContainer {
+    --boxSize: 6px;
+    --gutter: 3px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .windowVideo {
+    top: 10px;
+  }
+
+  .futureCard {
+    top: 40px;
+  }
+
+  .popup {
+    width: 95%;
+    font-size: 16px;
+  }
+
+  .boxContainer {
+    --boxSize: 4px;
+    --gutter: 2px;
+  }
+}
+
+
+
+
+
 

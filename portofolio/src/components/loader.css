@@ -31,7 +31,19 @@ section {
   .box-of-star1,
   .box-of-star2,
   .box-of-star3,
-  .box-of-star4 {
+  .box-of-star3,
+  .box-of-star4,
+  .box-of-star5,
+  .box-of-star6,
+  .box-of-star8,
+  .box-of-star9,
+  .box-of-star10,
+  .box-of-star11,
+  .box-of-star12,
+  .box-of-star13,
+  .box-of-star14,
+  .box-of-star15,
+  .box-of-star16 {
     width: 100%;
     position: absolute;
     z-index: 10;
@@ -54,6 +66,51 @@ section {
   }
   
   .box-of-star4 {
+    animation: snow 5s -3.30s linear infinite;
+  }
+  .box-of-star5 {
+    animation: snow 5s linear infinite;
+  }
+  
+  .box-of-star6 {
+    animation: snow 5s -1.64s linear infinite;
+  }
+  
+  .box-of-star7 {
+    animation: snow 5s -2.30s linear infinite;
+  }
+  
+  .box-of-star8 {
+    animation: snow 5s -3.30s linear infinite;
+  }
+  .box-of-star9 {
+    animation: snow 5s linear infinite;
+  }
+  
+  .box-of-star10 {
+    animation: snow 5s -1.64s linear infinite;
+  }
+  
+  .box-of-star11 {
+    animation: snow 5s -2.30s linear infinite;
+  }
+  
+  .box-of-star12 {
+    animation: snow 5s -3.30s linear infinite;
+  }
+  .box-of-star13 {
+    animation: snow 5s linear infinite;
+  }
+  
+  .box-of-star14 {
+    animation: snow 5s -1.64s linear infinite;
+  }
+  
+  .box-of-star15 {
+    animation: snow 5s -2.30s linear infinite;
+  }
+  
+  .box-of-star16 {
     animation: snow 5s -3.30s linear infinite;
   }
   
@@ -126,6 +183,112 @@ section {
   .star-position7 {
     top: 30px;
     left: 1480px;
+  }
+  
+  .star-position1bis {
+    top: 30px;
+    left: -20px;
+  }
+  
+  .star-position2bis {
+    top: 110px;
+    left: -250px;
+  }
+  
+  .star-position3bis {
+    top: 60px;
+    left: -570px;
+  }
+  
+  .star-position4bis {
+    top: 120px;
+    left: -900px;
+  }
+  
+  .star-position5bis {
+    top: 20px;
+    left: -1120px;
+  }
+  
+  .star-position6bis {
+    top: 90px;
+    left: -1280px;
+  }
+  
+  .star-position7bis {
+    top: 30px;
+    left: -1480px;
+  }
+
+  
+  .star-position1topright {
+    top: -530px;
+    left: 20px;
+  }
+  
+  .star-position2topright {
+    top: -660px;
+    left: 250px;
+  }
+  
+  .star-position3topright {
+    top: -560px;
+    left: 570px;
+  }
+  
+  .star-position4topright {
+    top: -680px;
+    left: 900px;
+  }
+  
+  .star-position5topright {
+    top: -520px;
+    left: 1120px;
+  }
+  
+  .star-position6topright {
+    top: -590px;
+    left: 1280px;
+  }
+  
+  .star-position7topright {
+    top: -530px;
+    left: 1480px;
+  }
+  
+  .star-position1topleft {
+    top: -530px;
+    left: -20px;
+  }
+  
+  .star-position2topleft {
+    top: -660px;
+    left: -250px;
+  }
+  
+  .star-position3topleft {
+    top: -560px;
+    left: -570px;
+  }
+  
+  .star-position4topleft {
+    top: -680px;
+    left: -900px;
+  }
+  
+  .star-position5topleft {
+    top: -520px;
+    left: -1120px;
+  }
+  
+  .star-position6topleft {
+    top: -590px;
+    left: -1280px;
+  }
+  
+  .star-position7topleft {
+    top: -530px;
+    left: -1480px;
   }
   
   .astronaut {

@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import { useFrame, useLoader } from '@react-three/fiber';
+import { useFrame, useLoader, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import shipScene from '/stylised_rocket.glb';
 
-const Rocket = ({ isRotating, ...props }) => {
+const Rocket = ({ isRotating, setZoomedIn, zoomedIn, currentStage, setZoomedAstro, ...props }) => {
     const ref = useRef();
     const { scene, animations } = useLoader(GLTFLoader, shipScene);
     const { actions } = useAnimations(animations, ref)
@@ -33,7 +33,7 @@ const Rocket = ({ isRotating, ...props }) => {
 
 
     return (
-        <mesh {...props} scale={[0.01, 0.01, 0.01]} position={[0, 0, 3.5]} rotation={[0, 0, 6]}>
+        <mesh {...props} scale={[0.01, 0.01, 0.01]} position={[0, 0, 3.5]} rotation={[0, 0, 6]} ref={ref}>
             <primitive object={scene} ref={ref} />
         </mesh>
     );
