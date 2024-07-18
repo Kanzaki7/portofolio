@@ -166,8 +166,8 @@ const Home = () => {
           <div className={isPlayingMusic ? "boxOn box7" : "boxOff box7"}></div>
         </div>
       </div>
-      {((currentStage !== 0 && zoomedIn == false) && window.innerWidth <= 1024) &&
-        <div className='absolute bottom-2 right-2'>
+      {(((currentStage !== 0  && currentStage !== -1) && zoomedIn == false) && window.innerWidth <= 1024) &&
+        <div className='absolute bottom-14 right-2'>
         <div className="text-bottomClick">
           <button className="clickEnter" onClick={clickEnter}>
               ENTER<span className="click-borderEnter"></span>
