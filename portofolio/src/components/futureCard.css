@@ -14,8 +14,8 @@
 .card-border {
   filter: drop-shadow(0px 0px 3px #05C7F2);
   transform: perspective(2000px) rotateY(-30deg);
-  width: 700px;
-  height: 580px;
+  width: 550px;
+  height: 500px;
   z-index: 5;
   transition: transform 0.6s ease; /* Add transition for smooth effect */
   position: relative; /* Ensure positioning for pseudo-element */
